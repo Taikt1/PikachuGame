@@ -1,0 +1,40 @@
+D:\Pikachu\GamePlay\bin\Debug\net8.0-windows\GamePlay.exe
+D:\Pikachu\GamePlay\bin\Debug\net8.0-windows\GamePlay.deps.json
+D:\Pikachu\GamePlay\bin\Debug\net8.0-windows\GamePlay.runtimeconfig.json
+D:\Pikachu\GamePlay\bin\Debug\net8.0-windows\GamePlay.dll
+D:\Pikachu\GamePlay\bin\Debug\net8.0-windows\GamePlay.pdb
+D:\Pikachu\GamePlay\obj\Debug\net8.0-windows\MainWindow.g.cs
+D:\Pikachu\GamePlay\obj\Debug\net8.0-windows\App.g.cs
+D:\Pikachu\GamePlay\obj\Debug\net8.0-windows\GamePlay_MarkupCompile.cache
+D:\Pikachu\GamePlay\obj\Debug\net8.0-windows\GamePlay_MarkupCompile.lref
+D:\Pikachu\GamePlay\obj\Debug\net8.0-windows\MainWindow.baml
+D:\Pikachu\GamePlay\obj\Debug\net8.0-windows\GamePlay.g.resources
+D:\Pikachu\GamePlay\obj\Debug\net8.0-windows\GamePlay.GeneratedMSBuildEditorConfig.editorconfig
+D:\Pikachu\GamePlay\obj\Debug\net8.0-windows\GamePlay.AssemblyInfoInputs.cache
+D:\Pikachu\GamePlay\obj\Debug\net8.0-windows\GamePlay.AssemblyInfo.cs
+D:\Pikachu\GamePlay\obj\Debug\net8.0-windows\GamePlay.csproj.CoreCompileInputs.cache
+D:\Pikachu\GamePlay\obj\Debug\net8.0-windows\GamePlay.dll
+D:\Pikachu\GamePlay\obj\Debug\net8.0-windows\refint\GamePlay.dll
+D:\Pikachu\GamePlay\obj\Debug\net8.0-windows\GamePlay.pdb
+D:\Pikachu\GamePlay\obj\Debug\net8.0-windows\GamePlay.genruntimeconfig.cache
+D:\Pikachu\GamePlay\obj\Debug\net8.0-windows\ref\GamePlay.dll
+D:\PRN - game\Pikachu\GamePlay\bin\Debug\net8.0-windows\GamePlay.exe
+D:\PRN - game\Pikachu\GamePlay\bin\Debug\net8.0-windows\GamePlay.deps.json
+D:\PRN - game\Pikachu\GamePlay\bin\Debug\net8.0-windows\GamePlay.runtimeconfig.json
+D:\PRN - game\Pikachu\GamePlay\bin\Debug\net8.0-windows\GamePlay.dll
+D:\PRN - game\Pikachu\GamePlay\bin\Debug\net8.0-windows\GamePlay.pdb
+D:\PRN - game\Pikachu\GamePlay\obj\Debug\net8.0-windows\MainWindow.g.cs
+D:\PRN - game\Pikachu\GamePlay\obj\Debug\net8.0-windows\App.g.cs
+D:\PRN - game\Pikachu\GamePlay\obj\Debug\net8.0-windows\GamePlay_MarkupCompile.cache
+D:\PRN - game\Pikachu\GamePlay\obj\Debug\net8.0-windows\GamePlay_MarkupCompile.lref
+D:\PRN - game\Pikachu\GamePlay\obj\Debug\net8.0-windows\MainWindow.baml
+D:\PRN - game\Pikachu\GamePlay\obj\Debug\net8.0-windows\GamePlay.g.resources
+D:\PRN - game\Pikachu\GamePlay\obj\Debug\net8.0-windows\GamePlay.GeneratedMSBuildEditorConfig.editorconfig
+D:\PRN - game\Pikachu\GamePlay\obj\Debug\net8.0-windows\GamePlay.AssemblyInfoInputs.cache
+D:\PRN - game\Pikachu\GamePlay\obj\Debug\net8.0-windows\GamePlay.AssemblyInfo.cs
+D:\PRN - game\Pikachu\GamePlay\obj\Debug\net8.0-windows\GamePlay.csproj.CoreCompileInputs.cache
+D:\PRN - game\Pikachu\GamePlay\obj\Debug\net8.0-windows\GamePlay.dll
+D:\PRN - game\Pikachu\GamePlay\obj\Debug\net8.0-windows\refint\GamePlay.dll
+D:\PRN - game\Pikachu\GamePlay\obj\Debug\net8.0-windows\GamePlay.pdb
+D:\PRN - game\Pikachu\GamePlay\obj\Debug\net8.0-windows\GamePlay.genruntimeconfig.cache
+D:\PRN - game\Pikachu\GamePlay\obj\Debug\net8.0-windows\ref\GamePlay.dll

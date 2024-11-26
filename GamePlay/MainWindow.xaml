@@ -1,0 +1,29 @@
+﻿<Window x:Class="GamePlay.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GamePlay"
+        mc:Ignorable="d"
+         Title="Game Pikachu" Height="506" Width="840"   WindowStartupLocation="CenterScreen" Background="#FF4CCBB8">
+    <Grid Margin="0,0,0,-6">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Menu và thông tin game -->
+        <StackPanel Orientation="Horizontal" Margin="10">
+            <Button x:Name="btnNewGame" Content="Game mới" Width="100" Height="30" Click="btnNewGame_Click"/>
+            <TextBlock Text="  Điểm: " FontSize="20" VerticalAlignment="Center"/>
+            <TextBlock x:Name="ScoreText" Text="0" FontSize="20" VerticalAlignment="Center"/>
+            <TextBlock Text="  Thời gian: " FontSize="20" Margin="20,0,0,0" VerticalAlignment="Center"/>
+            <TextBlock x:Name="TimeText" Text="100" FontSize="20" VerticalAlignment="Center"/>
+        </StackPanel>
+
+        <!-- Khu vực chơi game -->
+        <Border Grid.Row="1" Margin="10,10,10,10" Background="#FF085FA1">
+            <Canvas x:Name="GameCanvas"/>
+        </Border>
+    </Grid>
+</Window>

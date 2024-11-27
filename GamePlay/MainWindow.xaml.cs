@@ -20,13 +20,17 @@ namespace GamePlay
         private Border[,] pokemonCells;
         private Border firstSelected = null;
         private int score = 0;
-        private int timeLeft = 100;
+        private int timeLeft = DEFAULT_TIME_LEFT;
         private DispatcherTimer timer;
+        private int shuffleCount = 0;  // Biến đếm số lần shuffle
+        
 
         private const int POKEMON_TYPES = 36;  // Số loại pokemon
         private const int BOARD_WIDTH = 20;    // Số cột
         private const int BOARD_HEIGHT = 10;   // Số hàng
         private const int CELL_SIZE = 40;      // Kích thước mỗi ô
+        private const int MAX_SHUFFLE_COUNT = 3;  // Giới hạn số lần shuffle
+        private const int DEFAULT_TIME_LEFT = 240;
         public MainWindow()
         {
             InitializeComponent();
@@ -37,9 +41,11 @@ namespace GamePlay
         {
             // Reset game
             score = 0;
-            timeLeft = 100;
             ScoreText.Text = "0";
-            TimeText.Text = "100";
+            TimeText.Text = $"{DEFAULT_TIME_LEFT}";
+            shuffleCount = 0;
+            ShuffleButton.IsEnabled = true;
+            ShuffleButton.Content = $"Shuffle: {MAX_SHUFFLE_COUNT - shuffleCount}";
             GameCanvas.Children.Clear();
             firstSelected = null;
 
@@ -123,12 +129,20 @@ namespace GamePlay
                     clickedCell.Visibility = Visibility.Hidden;
                     score += 10;
                     ScoreText.Text = score.ToString();
+                    // Kiểm tra nếu không còn cặp hợp lệ và shuffle
+                    if (!gameModel.HasValidPairs())
+                    {
+                        gameModel.ShuffleBoard();
+                        // Cập nhật giao diện sau khi shuffle
+                        UpdateGameBoard();
+                    }
                 }
 
                 firstSelected.Background = Brushes.White;
                 firstSelected = null;
             }
         }
+
 
         private void StartTimer()
         {
@@ -158,7 +172,50 @@ namespace GamePlay
         {
             StartNewGame();
         }
+
+        private void ShuffleButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (shuffleCount >= MAX_SHUFFLE_COUNT)
+                return;
+            // Gọi phương thức Shuffle từ GameModel
+            gameModel.ShuffleBoard();
+
+            // Cập nhật giao diện sau khi shuffle
+            UpdateGameBoard();
+
+            shuffleCount++;
+            if(shuffleCount == 2)
+            {
+                ShuffleButton.IsEnabled = false;
+            }
+            ShuffleButton.Content = $"Shuffle: {MAX_SHUFFLE_COUNT - shuffleCount}";
+        }
+
+        private void UpdateGameBoard()
+        {
+            for (int i = 0; i < BOARD_HEIGHT; i++)
+            {
+                for (int j = 0; j < BOARD_WIDTH; j++)
+                {
+                    if (pokemonCells[i, j] != null)
+                    {
+                        int pokemonType = gameModel.GetCell(i, j);
+
+                        if (pokemonType == 0)
+                        {
+                            pokemonCells[i, j].Visibility = Visibility.Hidden;
+                        }
+                        else
+                        {
+                            Image pokemonImage = (Image)pokemonCells[i, j].Child;
+                            pokemonImage.Source = new BitmapImage(new Uri($"pack://application:,,,/Images/pieces{pokemonType}.png"));
+                            pokemonCells[i, j].Visibility = Visibility.Visible;
+                        }
+                    }
+                }
+            }
+        }
+
+
     }
-
-
 }

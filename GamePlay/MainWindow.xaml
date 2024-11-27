@@ -14,7 +14,8 @@
 
         <!-- Menu và thông tin game -->
         <StackPanel Orientation="Horizontal" Margin="10">
-            <Button x:Name="btnNewGame" Content="Game mới" Width="100" Height="30" Click="btnNewGame_Click"/>
+            <Button x:Name="btnNewGame" Content="Game mới" Width="100" Height="30" Click="btnNewGame_Click" Margin="0 0 10 0"/>
+            <Button x:Name="ShuffleButton" Content="Shuffle" Width="100" Height="30" Click="ShuffleButton_Click"  Margin="0 0 10 0"/>
             <TextBlock Text="  Điểm: " FontSize="20" VerticalAlignment="Center"/>
             <TextBlock x:Name="ScoreText" Text="0" FontSize="20" VerticalAlignment="Center"/>
             <TextBlock Text="  Thời gian: " FontSize="20" Margin="20,0,0,0" VerticalAlignment="Center"/>
@@ -22,8 +23,14 @@
         </StackPanel>
 
         <!-- Khu vực chơi game -->
-        <Border Grid.Row="1" Margin="10,10,10,10" Background="#FF085FA1">
-            <Canvas x:Name="GameCanvas"/>
-        </Border>
+        <Viewbox Grid.Row="1" Margin="10" MaxWidth="1000" MaxHeight="500">
+            <Canvas x:Name="GameCanvas"
+                    Grid.Row="1"
+                    ClipToBounds="True"
+                    Width="800"
+                    Height="400"
+                    Background="#FF085FA1"/>
+        </Viewbox>
+        
     </Grid>
 </Window>

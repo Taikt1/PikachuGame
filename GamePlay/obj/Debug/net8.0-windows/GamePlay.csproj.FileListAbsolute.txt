@@ -38,3 +38,24 @@ D:\PRN - game\Pikachu\GamePlay\obj\Debug\net8.0-windows\refint\GamePlay.dll
 D:\PRN - game\Pikachu\GamePlay\obj\Debug\net8.0-windows\GamePlay.pdb
 D:\PRN - game\Pikachu\GamePlay\obj\Debug\net8.0-windows\GamePlay.genruntimeconfig.cache
 D:\PRN - game\Pikachu\GamePlay\obj\Debug\net8.0-windows\ref\GamePlay.dll
+D:\Class\2024\FALL_2024\PRN212\Assignment\PikachuGame\GamePlay\bin\Debug\net8.0-windows\GamePlay.exe
+D:\Class\2024\FALL_2024\PRN212\Assignment\PikachuGame\GamePlay\bin\Debug\net8.0-windows\GamePlay.deps.json
+D:\Class\2024\FALL_2024\PRN212\Assignment\PikachuGame\GamePlay\bin\Debug\net8.0-windows\GamePlay.runtimeconfig.json
+D:\Class\2024\FALL_2024\PRN212\Assignment\PikachuGame\GamePlay\bin\Debug\net8.0-windows\GamePlay.dll
+D:\Class\2024\FALL_2024\PRN212\Assignment\PikachuGame\GamePlay\bin\Debug\net8.0-windows\GamePlay.pdb
+D:\Class\2024\FALL_2024\PRN212\Assignment\PikachuGame\GamePlay\obj\Debug\net8.0-windows\MainWindow.g.cs
+D:\Class\2024\FALL_2024\PRN212\Assignment\PikachuGame\GamePlay\obj\Debug\net8.0-windows\App.g.cs
+D:\Class\2024\FALL_2024\PRN212\Assignment\PikachuGame\GamePlay\obj\Debug\net8.0-windows\GamePlay_MarkupCompile.cache
+D:\Class\2024\FALL_2024\PRN212\Assignment\PikachuGame\GamePlay\obj\Debug\net8.0-windows\GamePlay_MarkupCompile.lref
+D:\Class\2024\FALL_2024\PRN212\Assignment\PikachuGame\GamePlay\obj\Debug\net8.0-windows\MainWindow.baml
+D:\Class\2024\FALL_2024\PRN212\Assignment\PikachuGame\GamePlay\obj\Debug\net8.0-windows\GamePlay.g.resources
+D:\Class\2024\FALL_2024\PRN212\Assignment\PikachuGame\GamePlay\obj\Debug\net8.0-windows\GamePlay.GeneratedMSBuildEditorConfig.editorconfig
+D:\Class\2024\FALL_2024\PRN212\Assignment\PikachuGame\GamePlay\obj\Debug\net8.0-windows\GamePlay.AssemblyInfoInputs.cache
+D:\Class\2024\FALL_2024\PRN212\Assignment\PikachuGame\GamePlay\obj\Debug\net8.0-windows\GamePlay.AssemblyInfo.cs
+D:\Class\2024\FALL_2024\PRN212\Assignment\PikachuGame\GamePlay\obj\Debug\net8.0-windows\GamePlay.csproj.CoreCompileInputs.cache
+D:\Class\2024\FALL_2024\PRN212\Assignment\PikachuGame\GamePlay\obj\Debug\net8.0-windows\GamePlay.sourcelink.json
+D:\Class\2024\FALL_2024\PRN212\Assignment\PikachuGame\GamePlay\obj\Debug\net8.0-windows\GamePlay.dll
+D:\Class\2024\FALL_2024\PRN212\Assignment\PikachuGame\GamePlay\obj\Debug\net8.0-windows\refint\GamePlay.dll
+D:\Class\2024\FALL_2024\PRN212\Assignment\PikachuGame\GamePlay\obj\Debug\net8.0-windows\GamePlay.pdb
+D:\Class\2024\FALL_2024\PRN212\Assignment\PikachuGame\GamePlay\obj\Debug\net8.0-windows\GamePlay.genruntimeconfig.cache
+D:\Class\2024\FALL_2024\PRN212\Assignment\PikachuGame\GamePlay\obj\Debug\net8.0-windows\ref\GamePlay.dll

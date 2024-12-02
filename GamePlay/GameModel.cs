@@ -8,7 +8,7 @@ public class GameModel
     private int width, height;
     private MediaPlayer soundPlayer;
     private MediaPlayer backgroundMusicPlayer; // Thêm biến để lưu trữ MediaPlayer
-    private Dictionary<int, List<Point>> possibleMatches;
+    public Dictionary<int, List<Point>> PossibleMatches { get; private set; }
     private static readonly int[] rowDirs = { -1, 1, 0, 0 };  // Các hướng: lên, xuống, trái, phải
     private static readonly int[] colDirs = { 0, 0, -1, 1 };  // Các hướng: lên, xuống, trái, phải
 
@@ -20,7 +20,7 @@ public class GameModel
         width = _width;
         height = _height;
         table = new int[height, width];
-        possibleMatches = new Dictionary<int, List<Point>>();
+        PossibleMatches = new Dictionary<int, List<Point>>();
         InitializeBoard(_numOfType);
         backgroundMusicPlayer = new MediaPlayer(); // Khởi tạo MediaPlayer
         backgroundMusicPlayer.Open(new Uri($"pack://application:,,,/Sounds/NhacNenGamePikachu.wav")); // Đường dẫn đến tệp nhạc nền
@@ -44,9 +44,9 @@ public class GameModel
             // Sinh ngẫu nhiên 1 loại pokemon (1 -> _numOfType)
             int typeOfPokemon = random.Next(1, _numOfType + 1);
 
-            if( !possibleMatches.ContainsKey(typeOfPokemon) )
+            if( !PossibleMatches.ContainsKey(typeOfPokemon) )
             {
-                possibleMatches[typeOfPokemon] = new List<Point>();
+                PossibleMatches[typeOfPokemon] = new List<Point>();
             }
 
             for (int j = 0; j < 2; j++)
@@ -56,7 +56,7 @@ public class GameModel
                 while (cellIndex.Contains(cell))
                     cell = random.Next(0, width * height);
                 table[cell / width, cell % width] = typeOfPokemon;
-                possibleMatches[typeOfPokemon].Add(new Point(cell / width, cell % width));
+                PossibleMatches[typeOfPokemon].Add(new Point(cell / width, cell % width));
                 cellIndex.Add(cell);
             }
         }
@@ -64,6 +64,7 @@ public class GameModel
 
     public int GetCell(int row, int col)
     {
+        System.Windows.MessageBox.Show($"[{row}, {col}]: {table[row, col]}");
         return table[row, col];
     }
 
@@ -74,10 +75,25 @@ public class GameModel
 
     public void RemovePair(int row1, int col1, int row2, int col2)
     {
+        RemovePairPointFromPossibleMatches(row1, col1, row2, col2);
         table[row1, col1] = 0;
         table[row2, col2] = 0;
     }
 
+    private void RemovePairPointFromPossibleMatches(int row1, int col1, int row2, int col2)
+    {
+        int type = table[row1, col1];
+        if (PossibleMatches.ContainsKey(type))
+        {
+            PossibleMatches[type].RemoveAll(p => (p.X == row1 && p.Y == col1) || (p.X == row2 && p.Y == col2));
+            if (!(PossibleMatches[type].Count > 0))
+            {
+                PossibleMatches.Remove(type);
+            } 
+        }
+    }
+
+    private int countShuffle = 0;
     public void ShuffleBoard()
     {
         // Thu thập tất cả các Pokémon còn lại
@@ -101,6 +117,8 @@ public class GameModel
 
         // Đặt lại Pokémon vào bảng, giữ nguyên vị trí các ô trống
         int index = 0;
+        PossibleMatches.Clear();
+
         for (int i = 0; i < height; i++)
         {
             for (int j = 0; j < width; j++)
@@ -108,38 +126,46 @@ public class GameModel
                 if (table[i, j] != 0)
                 {
                     table[i, j] = remainingPokemon[index];
+
+                    if (!PossibleMatches.ContainsKey(table[i, j]))
+                    {
+                        PossibleMatches[table[i, j]] = new List<Point>();
+                    }
+                    PossibleMatches[table[i, j]].Add(new Point(i, j));
+
                     index++;
                 }
             }
         }
 
         // Kiểm tra nếu không có cặp hợp lệ, thì xáo trộn lại
-        if (!HasValidPairs())
+        if (!HasValidPairs() && countShuffle < 10)
         {
+            countShuffle++;
             ShuffleBoard(); // Gọi lại phương thức shuffle nếu không tìm thấy cặp hợp lệ
         }
+        countShuffle = 0;
     }
+    
 
     public bool HasValidPairs()
     {
-        for (int r1 = 0; r1 < height; r1++)
+        foreach (var entry in PossibleMatches)
         {
-            for (int c1 = 0; c1 < width; c1++)
+            var points = entry.Value; // Danh sách tọa độ của loại Pokémon hiện tại
+
+            // Chỉ kiểm tra mỗi cặp (i, j) một lần với i < j
+            for (int i = 0; i < points.Count; i++)
             {
-                if (table[r1, c1] == 0) continue;  // Bỏ qua các ô trống
-
-                // Kiểm tra với tất cả các ô còn lại
-                for (int r2 = 0; r2 < height; r2++)
+                for (int j = i + 1; j < points.Count; j++)
                 {
-                    for (int c2 = 0; c2 < width; c2++)
-                    {
-                        if (table[r2, c2] == 0 || (r1 == r2 && c1 == c2)) continue;  // Bỏ qua các ô trống và chính nó
+                    var p1 = points[i];
+                    var p2 = points[j];
 
-                        // Nếu có thể nối được, trả về true
-                        if (CanConnect(r1, c1, r2, c2))
-                        {
-                            return true;
-                        }
+                    // Nếu hai tọa độ có thể kết nối được, trả về true
+                    if (CanConnect(p1.X, p1.Y, p2.X, p2.Y))
+                    {
+                        return true;
                     }
                 }
             }

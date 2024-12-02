@@ -27,8 +27,6 @@
             <Canvas x:Name="GameCanvas"
                     Grid.Row="1"
                     ClipToBounds="True"
-                    Width="800"
-                    Height="400"
                     Background="#FF085FA1"/>
         </Viewbox>
         

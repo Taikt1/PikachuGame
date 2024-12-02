@@ -23,17 +23,30 @@ namespace GamePlay
         private int timeLeft = DEFAULT_TIME_LEFT;
         private DispatcherTimer timer;
         private int shuffleCount = 0;  // Biến đếm số lần shuffle
+        private int level = 1;
         
 
         private const int POKEMON_TYPES = 36;  // Số loại pokemon
-        private const int BOARD_WIDTH = 20;    // Số cột
-        private const int BOARD_HEIGHT = 10;   // Số hàng
+        private int boardWidth = 4;    // Số cột
+        private int boardHeight = 4;   // Số hàng
         private const int CELL_SIZE = 40;      // Kích thước mỗi ô
         private const int MAX_SHUFFLE_COUNT = 3;  // Giới hạn số lần shuffle
         private const int DEFAULT_TIME_LEFT = 240;
         public MainWindow()
         {
             InitializeComponent();
+
+            GameCanvas.Width = boardWidth * CELL_SIZE;
+            GameCanvas.Height = boardHeight * CELL_SIZE;
+          
+            ((Viewbox)GameCanvas.Parent).MinWidth = boardWidth * CELL_SIZE;
+            ((Viewbox)GameCanvas.Parent).MinHeight = boardHeight * CELL_SIZE;
+            ((Viewbox)GameCanvas.Parent).MaxHeight = boardHeight * CELL_SIZE + 100;
+            ((Viewbox)GameCanvas.Parent).MaxWidth = boardWidth * CELL_SIZE + 100;
+
+            this.MinWidth = boardWidth * CELL_SIZE + 106;
+            this.MinHeight = boardHeight * CELL_SIZE + 106;
+
             StartNewGame();
         }
 
@@ -50,17 +63,44 @@ namespace GamePlay
             firstSelected = null;
 
             // Khởi tạo game mới
-            gameModel = new GameModel(BOARD_WIDTH, BOARD_HEIGHT, POKEMON_TYPES);
-            pokemonCells = new Border[BOARD_HEIGHT, BOARD_WIDTH];
+            gameModel = new GameModel(boardWidth, boardHeight, POKEMON_TYPES);
+            pokemonCells = new Border[boardHeight, boardWidth];
+            CreateGameBoard();
+            StartTimer();
+        }
+
+        private void NextLevel()
+        {
+            TimeText.Text = $"{DEFAULT_TIME_LEFT}";
+            GameCanvas.Children.Clear();
+            firstSelected = null;
+            level++;
+
+            // Khởi tạo game mới
+            boardWidth++;
+            boardHeight++;
+            gameModel = new GameModel(boardWidth, boardHeight, POKEMON_TYPES);
+            pokemonCells = new Border[boardHeight, boardWidth];
+            GameCanvas.Width = boardWidth * CELL_SIZE;
+            GameCanvas.Height = boardHeight * CELL_SIZE;
+
+            ((Viewbox)GameCanvas.Parent).MinWidth = boardWidth * CELL_SIZE;
+            ((Viewbox)GameCanvas.Parent).MinHeight = boardHeight * CELL_SIZE;
+            ((Viewbox)GameCanvas.Parent).MaxHeight = boardHeight * CELL_SIZE + 100;
+            ((Viewbox)GameCanvas.Parent).MaxWidth = boardWidth * CELL_SIZE + 100;
+
+            this.MinWidth = boardWidth * CELL_SIZE + 106;
+            this.MinHeight = boardHeight * CELL_SIZE + 106;
+
             CreateGameBoard();
             StartTimer();
         }
 
         private void CreateGameBoard()
         {
-            for (int i = 0; i < BOARD_HEIGHT; i++)
+            for (int i = 0; i < boardHeight; i++)
             {
-                for (int j = 0; j < BOARD_WIDTH; j++)
+                for (int j = 0; j < boardWidth; j++)
                 {
                     // Tạo hình ảnh pokemon
                     Image pokemonImage = new Image
@@ -127,18 +167,25 @@ namespace GamePlay
                     gameModel.RemovePair(firstRow, firstCol, row, col);
                     firstSelected.Visibility = Visibility.Hidden;
                     clickedCell.Visibility = Visibility.Hidden;
-                    score += 10;
+                    score += 10 * level;
                     ScoreText.Text = score.ToString();
-                    // Kiểm tra nếu không còn cặp hợp lệ và shuffle
-                    if (!gameModel.HasValidPairs())
+                    if (gameModel.PossibleMatches.Count > 0)
                     {
-                        gameModel.ShuffleBoard();
-                        // Cập nhật giao diện sau khi shuffle
-                        UpdateGameBoard();
+                        // Kiểm tra nếu không còn cặp hợp lệ và shuffle
+                        if (!gameModel.HasValidPairs())
+                        {
+                            gameModel.ShuffleBoard();
+                            // Cập nhật giao diện sau khi shuffle
+                            UpdateGameBoard();
+                        }
+                    } 
+                    else
+                    {
+                        NextLevel();
                     }
                 }
 
-                firstSelected.Background = Brushes.White;
+                //firstSelected.Background = Brushes.Red;
                 firstSelected = null;
             }
         }
@@ -184,7 +231,7 @@ namespace GamePlay
             UpdateGameBoard();
 
             shuffleCount++;
-            if(shuffleCount == 2)
+            if(shuffleCount > 2)
             {
                 ShuffleButton.IsEnabled = false;
             }
@@ -193,9 +240,9 @@ namespace GamePlay
 
         private void UpdateGameBoard()
         {
-            for (int i = 0; i < BOARD_HEIGHT; i++)
+            for (int i = 0; i < boardHeight; i++)
             {
-                for (int j = 0; j < BOARD_WIDTH; j++)
+                for (int j = 0; j < boardWidth; j++)
                 {
                     if (pokemonCells[i, j] != null)
                     {

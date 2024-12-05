@@ -27,11 +27,14 @@ namespace GamePlay
         
 
         private const int POKEMON_TYPES = 36;  // Số loại pokemon
-        private int boardWidth = 4;    // Số cột
-        private int boardHeight = 4;   // Số hàng
+        private int boardWidth = BOARD_WIDTH;    // Số cột
+        private int boardHeight = BOARD_HEIGHT;   // Số hàng
         private const int CELL_SIZE = 40;      // Kích thước mỗi ô
-        private const int MAX_SHUFFLE_COUNT = 3;  // Giới hạn số lần shuffle
-        private const int DEFAULT_TIME_LEFT = 240;
+        private const int MAX_SHUFFLE_COUNT = 5;  // Giới hạn số lần shuffle
+        private const int DEFAULT_TIME_LEFT = 300;
+        private const int BOARD_WIDTH = 4;
+        private const int BOARD_HEIGHT = 4;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -61,26 +64,21 @@ namespace GamePlay
             ShuffleButton.Content = $"Shuffle: {MAX_SHUFFLE_COUNT - shuffleCount}";
             GameCanvas.Children.Clear();
             firstSelected = null;
+            boardWidth = BOARD_WIDTH;
+            boardHeight = BOARD_HEIGHT;
+
+            SetUpWindowSize();
 
             // Khởi tạo game mới
             gameModel = new GameModel(boardWidth, boardHeight, POKEMON_TYPES);
             pokemonCells = new Border[boardHeight, boardWidth];
+
             CreateGameBoard();
             StartTimer();
         }
 
-        private void NextLevel()
+        private void SetUpWindowSize()
         {
-            TimeText.Text = $"{DEFAULT_TIME_LEFT}";
-            GameCanvas.Children.Clear();
-            firstSelected = null;
-            level++;
-
-            // Khởi tạo game mới
-            boardWidth++;
-            boardHeight++;
-            gameModel = new GameModel(boardWidth, boardHeight, POKEMON_TYPES);
-            pokemonCells = new Border[boardHeight, boardWidth];
             GameCanvas.Width = boardWidth * CELL_SIZE;
             GameCanvas.Height = boardHeight * CELL_SIZE;
 
@@ -91,9 +89,57 @@ namespace GamePlay
 
             this.MinWidth = boardWidth * CELL_SIZE + 106;
             this.MinHeight = boardHeight * CELL_SIZE + 106;
+        }
+
+        private void NextLevel()
+        {
+            timeLeft = DEFAULT_TIME_LEFT;
+            TimeText.Text = $"{timeLeft}";
+            GameCanvas.Children.Clear();
+            firstSelected = null;
+            level++;
+
+            // Khởi tạo game mới
+            IncreaseBoardSize();
+            gameModel = new GameModel(boardWidth, boardHeight, POKEMON_TYPES);
+            pokemonCells = new Border[boardHeight, boardWidth];
+            
+            SetUpWindowSize();
 
             CreateGameBoard();
             StartTimer();
+        }
+
+        public void IncreaseBoardSize()
+        {
+            // Tăng kích thước xen kẽ giữa chiều rộng và chiều cao
+            if (level % 2 == 0)
+            {
+                boardWidth += 2; // Tăng chiều rộng
+            }
+            else
+            {
+                boardHeight += 2; // Tăng chiều cao
+            }
+
+            // Đảm bảo số ô là số chẵn
+            if ((boardWidth * boardHeight) % 2 != 0)
+            {
+                boardWidth++; // Điều chỉnh để tổng số ô là số chẵn
+            }
+
+            // Giới hạn kích thước tối đa (tuỳ chọn)
+            int maxWidth = 20;
+            int maxHeight = 10;
+
+            if (boardWidth > maxWidth) { 
+                boardWidth = maxWidth;
+                timeLeft = DEFAULT_TIME_LEFT - level;
+            }
+
+            if (boardHeight > maxHeight)
+                boardHeight = maxHeight;
+
         }
 
         private void CreateGameBoard()
@@ -174,6 +220,7 @@ namespace GamePlay
                         // Kiểm tra nếu không còn cặp hợp lệ và shuffle
                         if (!gameModel.HasValidPairs())
                         {
+                            System.Windows.MessageBox.Show("Hết đường đi, màn chơi sẽ được xáo trộn");
                             gameModel.ShuffleBoard();
                             // Cập nhật giao diện sau khi shuffle
                             UpdateGameBoard();
@@ -231,7 +278,7 @@ namespace GamePlay
             UpdateGameBoard();
 
             shuffleCount++;
-            if(shuffleCount > 2)
+            if(shuffleCount > (MAX_SHUFFLE_COUNT - 1))
             {
                 ShuffleButton.IsEnabled = false;
             }

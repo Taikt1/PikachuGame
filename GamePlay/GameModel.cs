@@ -8,6 +8,7 @@ public class GameModel
     private int width, height;
     private MediaPlayer soundPlayer;
     private MediaPlayer backgroundMusicPlayer; // Thêm biến để lưu trữ MediaPlayer
+    private List<Point> path;
     public Dictionary<int, List<Point>> PossibleMatches { get; private set; }
     private static readonly int[] rowDirs = { -1, 1, 0, 0 };  // Các hướng: lên, xuống, trái, phải
     private static readonly int[] colDirs = { 0, 0, -1, 1 };  // Các hướng: lên, xuống, trái, phải
@@ -64,7 +65,7 @@ public class GameModel
 
     public int GetCell(int row, int col)
     {
-        System.Windows.MessageBox.Show($"[{row}, {col}]: {table[row, col]}");
+        //System.Windows.MessageBox.Show($"[{row}, {col}]: {table[row, col]}");
         return table[row, col];
     }
 
@@ -174,53 +175,176 @@ public class GameModel
         return false;  // Không tìm thấy cặp hợp lệ
     }
 
-    public bool CanConnect(int r1, int c1, int r2, int c2)
+    //public bool CanConnect(int r1, int c1, int r2, int c2)
+    //{
+    //    // Kiểm tra nếu các ô có cùng loại Pokémon
+    //    if (table[r1, c1] != table[r2, c2]) return false;
+
+    //    // Khởi tạo hàng đợi BFS
+    //    Queue<(int, int, int, int)> queue = new Queue<(int, int, int, int)>();
+    //    bool[,] visited = new bool[height, width];
+    //    queue.Enqueue((r1, c1, -1, 0));  // Vị trí ban đầu, không có quẹo và chưa di chuyển
+
+    //    visited[r1, c1] = true;
+
+    //    while (queue.Count > 0)
+    //    {
+    //        var (currentR, currentC, lastDir, bends) = queue.Dequeue();
+
+    //        // Nếu đã đến ô đích
+    //        if (currentR == r2 && currentC == c2)
+    //            return true;
+
+    //        // Duyệt qua các hướng di chuyển
+    //        for (int i = 0; i < 4; i++)
+    //        {
+    //            int newR = currentR + rowDirs[i];
+    //            int newC = currentC + colDirs[i];
+
+    //            if (IsValidMove(newR, newC) && !visited[newR, newC])
+    //            {
+    //                // Nếu đi theo hướng mới và khác hướng trước, thì sẽ là một lần quẹo
+    //                int newBends = (lastDir == -1 || lastDir == i) ? bends : bends + 1;
+
+    //                // Nếu số lần quẹo vượt quá 2 thì bỏ qua
+    //                if (newBends > 2)
+    //                    continue;
+
+    //                visited[newR, newC] = true;
+    //                queue.Enqueue((newR, newC, i, newBends));
+    //            }
+    //        }
+    //    }
+
+    //    return false;  // Không tìm thấy đường nối hợp lệ
+    //}
+
+    //private bool IsValidMove(int r, int c)
+    //{
+    //    return r >= 0 && r < height && c >= 0 && c < width && table[r, c] != 0;  // Không phải là ô trống
+    //}
+
+    bool BFSCheckPath(int[,] board, Point start, Point end)
     {
-        // Kiểm tra nếu các ô có cùng loại Pokémon
-        if (table[r1, c1] != table[r2, c2]) return false;
+        path = new List<Point>();
+        int rows = height;
+        int cols = width;
+        var directions = new Point[] { new Point(0, 1), new Point(0, -1), new Point(1, 0), new Point(-1, 0) };
+        // System.Windows.MessageBox.Show("DirCOunt : " + directions.Count());
 
-        // Khởi tạo hàng đợi BFS
-        Queue<(int, int, int, int)> queue = new Queue<(int, int, int, int)>();
-        bool[,] visited = new bool[height, width];
-        queue.Enqueue((r1, c1, -1, 0));  // Vị trí ban đầu, không có quẹo và chưa di chuyển
+        // BFS Queue: Mỗi phần tử lưu (tọa độ hiện tại, số lần rẽ, hướng di chuyển)
+        var queue = new Queue<(Point, int, Point)>();
+        var visited = new bool[rows, cols];
+        //System.Windows.MessageBox.Show("DirCOunt lan 1 : " + directions.Count());
 
-        visited[r1, c1] = true;
+        foreach (var dir in directions)
+        {
+            queue.Enqueue((start, 0, dir));
+        }
 
+        int finalTurn = -1;
+        Point finalPoint = new Point(1000, 1000);
         while (queue.Count > 0)
         {
-            var (currentR, currentC, lastDir, bends) = queue.Dequeue();
+            var (current, turns, direction) = queue.Dequeue();
 
-            // Nếu đã đến ô đích
-            if (currentR == r2 && currentC == c2)
-                return true;
+            finalPoint = current;
+            finalTurn = turns;
 
-            // Duyệt qua các hướng di chuyển
-            for (int i = 0; i < 4; i++)
+            if (turns > 2) continue;
+
+            if (turns == 1)
             {
-                int newR = currentR + rowDirs[i];
-                int newC = currentC + colDirs[i];
+                // Vector hướng từ current đến end
+                var targetDirection = new Point(end.X - current.X, end.Y - current.Y);
 
-                if (IsValidMove(newR, newC) && !visited[newR, newC])
+                // Kiểm tra nếu hướng di chuyển ngược với targetDirection
+                if (IsOppositeDirection(direction, targetDirection))
                 {
-                    // Nếu đi theo hướng mới và khác hướng trước, thì sẽ là một lần quẹo
-                    int newBends = (lastDir == -1 || lastDir == i) ? bends : bends + 1;
+                    //System.Windows.MessageBox.Show("Diem bi nguoc : " + current + " || direction : " + direction + "|| turns : " + turns);
+                    continue; // Bỏ qua nếu hướng ngược chiều
+                }
+            }
 
-                    // Nếu số lần quẹo vượt quá 2 thì bỏ qua
-                    if (newBends > 2)
-                        continue;
+            else if (turns == 2)
+            {
+                if (current.X != end.X && current.Y != end.Y)
+                    continue;
+            }
 
-                    visited[newR, newC] = true;
-                    queue.Enqueue((newR, newC, i, newBends));
+            if (!visited[current.X, current.Y] && turns <= 2)
+                path.Add(current);
+
+            visited[current.X, current.Y] = true;
+
+            foreach (var dir in directions)
+            {
+                var next = new Point(current.X + dir.X, current.Y + dir.Y);
+
+                if (IsValidMove(board, visited, next, rows, cols))
+                {
+                    int newTurns = (dir != direction) ? turns + 1 : turns;
+                    queue.Enqueue((next, newTurns, dir));
+                }
+
+                if (next == end && turns <= 2)
+                {
+                    path.Add(end);
+                    string s = "|| ";
+                    foreach (Point p in path)
+                    {
+                        s += p + " || ";
+                    }
+                    // System.Windows.MessageBox.Show("So luong : " + path.Count());
+                    // System.Windows.MessageBox.Show("Mem of path : " + s);
+                    return true;
                 }
             }
         }
 
-        return false;  // Không tìm thấy đường nối hợp lệ
+        string s2 = "";
+        foreach (Point p in path)
+        {
+            s2 += p + " || ";
+        }
+        // System.Windows.MessageBox.Show("Duong dan sai : \n " + s2 + "|| final turn : " + finalTurn + "|| final point : " + finalPoint);
+        // ResetLinePaths();
+        return false;
     }
 
-    private bool IsValidMove(int r, int c)
+
+    private bool IsOppositeDirection(Point dir1, Point dir2)
     {
-        return r >= 0 && r < height && c >= 0 && c < width && table[r, c] != 0;  // Không phải là ô trống
+        // Chuẩn hóa hướng để so sánh (chỉ giữ -1, 0, 1)
+        dir1 = NormalizeDirection(dir1);
+        dir2 = NormalizeDirection(dir2);
+
+        // Hai hướng ngược chiều nếu tích vô hướng của chúng là -1
+        return dir1.X * dir2.X + dir1.Y * dir2.Y == -1;
     }
 
+
+    bool IsValidMove(int[,] board, bool[,] visited, Point next, int rows, int cols)
+    {
+        return next.X >= 0 && next.X < rows &&
+               next.Y >= 0 && next.Y < cols &&
+               !visited[next.X, next.Y] &&
+               board[next.X, next.Y] == 0; // Ô trống
+    }
+    public bool CanConnect(int x1, int y1, int x2, int y2)
+    {
+        Point p1 = new Point(x1, y1);
+        Point p2 = new Point(x2, y2);
+        if (table[p1.X, p1.Y] != table[p2.X, p2.Y] || table[p1.X, p1.Y] == 0)
+            return false;
+
+        return BFSCheckPath(table, p1, p2) == true ? true : BFSCheckPath(table, p2, p1);
+    }
+    private Point NormalizeDirection(Point dir)
+    {
+        // Chuẩn hóa vector để có giá trị -1, 0, 1
+        int x = dir.X == 0 ? 0 : dir.X / Math.Abs(dir.X);
+        int y = dir.Y == 0 ? 0 : dir.Y / Math.Abs(dir.Y);
+        return new Point(x, y);
+    }
 }
